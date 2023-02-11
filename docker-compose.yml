@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  teamspeak:
+    image: mbentley/teamspeak
+    environment:
+      - PUID=1000
+      - PGID=1000                                                             
+      - TS3SERVER_LICENSE=accept
+    volumes:
+      - data:/data
+    ports:
+      - 9987:9987/udp
+    restart: unless-stopped
+
+volumes:
+  data:
