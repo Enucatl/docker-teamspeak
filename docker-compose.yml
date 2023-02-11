@@ -11,6 +11,8 @@ services:
     ports:
       - 9987:9987/udp
     restart: unless-stopped
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
 
 volumes:
   data:
