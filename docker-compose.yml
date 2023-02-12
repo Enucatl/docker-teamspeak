@@ -6,6 +6,8 @@ services:
       - SYS_MODULE
     image: enucatl/teamspeak-vpn
     environment:
+      - PUID=1000
+      - GUID=1000
       - TS_DIRECTORY=/opt/teamspeak
       - TS3SERVER_LICENSE=accept
     volumes:
