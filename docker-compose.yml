@@ -35,10 +35,14 @@ services:
     volumes:
       - data:/data
     restart: unless-stopped
-    network_mode: service:wireguard
-    depends_on:
-      wireguard:
-        condition: service_healthy
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 10022:10022
+    # network_mode: service:wireguard
+    # depends_on:
+    #   wireguard:
+    #     condition: service_healthy
 
 volumes:
   data:
