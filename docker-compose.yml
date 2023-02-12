@@ -3,8 +3,6 @@ services:
   teamspeak:
     image: enucatl/teamspeak-vpn
     environment:
-      - PUID=1000
-      - PGID=1000                                                             
       - TS3SERVER_LICENSE=accept
     volumes:
       - data:/data
