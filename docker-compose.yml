@@ -20,6 +20,8 @@ services:
       retries: 1
       start_period: 10s
       timeout: 30s
+    ports:
+      - 9987:9987/udp
     restart: unless-stopped
 
   teamspeak:
@@ -30,8 +32,6 @@ services:
       - TS3SERVER_LICENSE=accept
     volumes:
       - data:/data
-    ports:
-      - 9987:9987/udp
     restart: unless-stopped
     network_mode: service:wireguard
     depends_on:
