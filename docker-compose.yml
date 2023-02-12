@@ -14,6 +14,12 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv6.conf.all.disable_ipv6=1
       - net.ipv6.conf.default.disable_ipv6=1
+    healthcheck:
+      test: curl -s https://am.i.mullvad.net/connected | grep -v "not connected"
+      interval: 600s
+      retries: 1
+      start_period: 60s
+      timeout: 30s
     restart: unless-stopped
 
   teamspeak:
