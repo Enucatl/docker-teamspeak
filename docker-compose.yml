@@ -16,10 +16,10 @@ services:
       - net.ipv6.conf.default.disable_ipv6=1
     healthcheck:
       test: curl -s https://am.i.mullvad.net/connected | grep -v "not connected"
-      interval: 600s
+      interval: 60s
       retries: 1
-      start_period: 10s
-      timeout: 30s
+      start_period: 5s
+      timeout: 10s
     ports:
       - 9987:9987/udp
     restart: unless-stopped
