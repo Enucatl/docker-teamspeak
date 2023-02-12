@@ -3,6 +3,7 @@ services:
   teamspeak:
     image: enucatl/teamspeak-vpn
     environment:
+      - TS_DIRECTORY=/opt/teamspeak
       - TS3SERVER_LICENSE=accept
     volumes:
       - data:/data
