@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 
   teamspeak:
-    image: mbentley/teamspeak
+    image: mbentley/teamspeak:latest
     environment:
       - PUID=1000
       - PGID=1000
