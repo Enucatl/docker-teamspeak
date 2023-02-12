@@ -1,21 +1,29 @@
 version: "3.8"
 services:
-  teamspeak:
+  wireguard:
+    image: linuxserver/wireguard:latest
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
-    image: enucatl/teamspeak-vpn
     environment:
-      - TS_DIRECTORY=/opt/teamspeak
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - config:/config
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+  teamspeak:
+    image: mbentley/teamspeak
+    environment:
+      - PUID=1000
+      - PGID=1000
       - TS3SERVER_LICENSE=accept
     volumes:
       - data:/data
-      - config:/config
     ports:
       - 9987:9987/udp
-      - 51820:51820/udp
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
 
 volumes:
