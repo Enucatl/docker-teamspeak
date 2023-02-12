@@ -27,7 +27,7 @@ services:
   #   restart: unless-stopped
 
   teamspeak:
-    image: mbentley/teamspeak:latest
+    image: mbentley/teamspeak:debian
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
