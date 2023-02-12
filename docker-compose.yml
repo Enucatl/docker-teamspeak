@@ -1,30 +1,30 @@
 version: "3.8"
 services:
-  wireguard:
-    image: linuxserver/wireguard:latest
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-    volumes:
-      - config:/config
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv6.conf.all.disable_ipv6=1
-      - net.ipv6.conf.default.disable_ipv6=1
-    healthcheck:
-      test: curl -s https://am.i.mullvad.net/connected | grep -v "not connected"
-      interval: 60s
-      retries: 1
-      start_period: 5s
-      timeout: 10s
-    ports:
-      - 9987:9987/udp
-      - 10011:10011
-      - 10022:10022
-    restart: unless-stopped
+  # wireguard:
+  #   image: linuxserver/wireguard:latest
+  #   cap_add:
+  #     - NET_ADMIN
+  #     - SYS_MODULE
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #   volumes:
+  #     - config:/config
+  #   sysctls:
+  #     - net.ipv4.conf.all.src_valid_mark=1
+  #     - net.ipv6.conf.all.disable_ipv6=1
+  #     - net.ipv6.conf.default.disable_ipv6=1
+  #   healthcheck:
+  #     test: curl -s https://am.i.mullvad.net/connected | grep -v "not connected"
+  #     interval: 60s
+  #     retries: 1
+  #     start_period: 5s
+  #     timeout: 10s
+  #   ports:
+  #     - 9987:9987/udp
+  #     - 10011:10011
+  #     - 10022:10022
+  #   restart: unless-stopped
 
   teamspeak:
     image: mbentley/teamspeak:latest
