@@ -13,6 +13,8 @@ services:
     restart: unless-stopped
     ports:
       - 9987:9987/udp
+    labels:
+      - "checkmk_monitor=true"
 
 volumes:
   data:
