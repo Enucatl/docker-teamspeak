@@ -7,6 +7,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TS3SERVER_LICENSE=accept
+      - TS3SERVER_GDPR_SAVE=true
     volumes:
       - data:/data
     restart: unless-stopped
