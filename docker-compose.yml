@@ -2,19 +2,34 @@ version: "3.8"
 services:
 
   teamspeak:
-    image: mbentley/teamspeak:debian
+    image: teamspeak:latest
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - TS3SERVER_DB_PLUGIN=ts3db_mariadb
+      - TS3SERVER_DB_SQLCREATEPATH=create_mariadb
+      - TS3SERVER_DB_HOST=db
+      - TS3SERVER_DB_USER=root
+      - TS3SERVER_DB_PASSWORD=${DB_PASSWORD}
+      - TS3SERVER_DB_NAME=${DB_NAME}
+      - TS3SERVER_DB_WAITUNTILREADY=30
+      - TS3SERVER_DB_CONNECTIONS=5
       - TS3SERVER_LICENSE=accept
-      - TS3SERVER_GDPR_SAVE=true
     volumes:
-      - data:/data
+      - ts3server:/var/ts3server
     restart: unless-stopped
     ports:
       - 9987:9987/udp
     labels:
       - "checkmk_monitor=true"
 
+  db:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ts3database:/var/lib/mysql
+
 volumes:
-  data:
+  ts3server:
+  ts3database:
