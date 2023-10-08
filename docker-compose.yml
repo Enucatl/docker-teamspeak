@@ -4,14 +4,14 @@ services:
   teamspeak:
     image: teamspeak:latest
     environment:
+      - TS3SERVER_DB_CONNECTIONS=5
+      - TS3SERVER_DB_HOST=db
+      - TS3SERVER_DB_NAME=${DB_NAME}
+      - TS3SERVER_DB_PASSWORD=${DB_PASSWORD}
       - TS3SERVER_DB_PLUGIN=ts3db_mariadb
       - TS3SERVER_DB_SQLCREATEPATH=create_mariadb
-      - TS3SERVER_DB_HOST=db
       - TS3SERVER_DB_USER=root
-      - TS3SERVER_DB_PASSWORD=${DB_PASSWORD}
-      - TS3SERVER_DB_NAME=${DB_NAME}
       - TS3SERVER_DB_WAITUNTILREADY=30
-      - TS3SERVER_DB_CONNECTIONS=5
       - TS3SERVER_LICENSE=accept
     volumes:
       - ts3server:/var/ts3server
@@ -20,6 +20,11 @@ services:
       - 9987:9987/udp
     labels:
       - "checkmk_monitor=true"
+    networks:
+      - default
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.eth0.proxy_ndp=1
 
   db:
     image: mariadb
@@ -29,7 +34,18 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
       - ts3database:/var/lib/mysql
+    networks:
+      - default
 
 volumes:
   ts3server:
   ts3database:
+
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/16
+          gateway: 172.23.0.1
