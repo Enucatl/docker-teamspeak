@@ -1,7 +1,11 @@
 services:
 
   teamspeak:
+    extends:
+      file: ../compose-security-baseline/hardening.yml
+      service: chown-init-medium
     image: teamspeak:latest
+    cpu_shares: 1024
     environment:
       - TS3SERVER_DB_WAITUNTILREADY=30
       - TS3SERVER_LICENSE=accept
