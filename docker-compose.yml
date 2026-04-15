@@ -3,10 +3,22 @@ services:
   teamspeak:
     extends:
       file: ../compose-security-baseline/hardening.yml
-      service: chown-init-medium
+      service: hardened-medium
+    user: 9987:9987
     image: teamspeak:latest
+    tmpfs:
+      - /var/run/ts3server:rw,noexec,nosuid,nodev,size=8m,uid=9987,gid=9987,mode=0700
+    depends_on:
+      db:
+        condition: service_healthy
     cpu_shares: 1024
     environment:
+      - TS3SERVER_DB_PLUGIN=ts3db_mariadb
+      - TS3SERVER_DB_SQLCREATEPATH=create_mariadb
+      - TS3SERVER_DB_HOST=db
+      - TS3SERVER_DB_USER=teamspeak
+      - TS3SERVER_DB_PASSWORD=${DB_PASSWORD}
+      - TS3SERVER_DB_NAME=${DB_NAME}
       - TS3SERVER_DB_WAITUNTILREADY=30
       - TS3SERVER_LICENSE=accept
     volumes:
@@ -21,8 +33,34 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
 
+  db:
+    extends:
+      file: ../compose-security-baseline/hardening.yml
+      service: hardened-small
+    image: mariadb:latest
+    user: 999:999
+    tmpfs:
+      - /run/mysqld:rw,noexec,nosuid,nodev,size=16m,uid=999,gid=999,mode=0755
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_NAME}
+      - MARIADB_USER=teamspeak
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", 'mariadb-admin ping -h 127.0.0.1 -uroot -p"$${MARIADB_ROOT_PASSWORD}" --silent']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - default
+
 volumes:
   ts3server:
+  mariadb:
 
 networks:
   default:
